@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package document;
+
+service DocumentService {
+  rpc SyncDocument (DocumentChange) returns (DocumentResponse);
+  rpc CheckForChanges (ChangeCheckRequest) returns (DocumentUpdate);
+  rpc GetDocument (Empty) returns (DocumentContent);
+  rpc Subscribe (SubscribeRequest) returns (stream DocumentChange);  // Subscription method
+}
+
+message DocumentChange {
+  string content = 1;
+  string client_id = 2;
+}
+
+message DocumentResponse {
+  string status = 1;
+}
+
+message ChangeCheckRequest {
+  string client_id = 1;
+}
+
+message DocumentUpdate {
+  int32 has_changes = 1;
+  string content = 2;
+}
+
+message DocumentContent {
+  string content = 1;
+}
+
+message SubscribeRequest {   // Add this message
+  string client_id = 1;
+}
+
+message Empty {}  // For GetDocument RPC
